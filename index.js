@@ -1,6 +1,10 @@
 let colors = ["green", "yellow", "black", "red", "blue"];
 let choosenColors = [];
-let currentMaxRows = 5;
+let maxRows = 5;
+let currentMaxRows = maxRows;
+
+let shuffleButton = document.querySelector("#shuffle");
+shuffleButton.addEventListener("click", shuffle);
 
 generateGameTable();
 
@@ -67,4 +71,25 @@ function generateGameTable() {
 		//	console.log(document.getElementById(`gameRow${i}`));
 	}
 	//console.log(gameTable);
+}
+
+function generateRandomColor() {
+	return colors[Math.floor(Math.random() * colors.length)];
+}
+
+function shuffle() {
+	//console.log(choosenColors);
+
+	let positions = document.getElementById("master").children;
+	choosenColors = [];
+	for (let i = 0; i < positions.length; i++) {
+		if (positions[i].id != "buttonShuffle") {
+			let colorName = generateRandomColor();
+			positions[i].children[0].className = "ball " + colorName;
+
+			choosenColors.push(colorName);
+		}
+	}
+	//console.log(choosenColors);
+	blockCheck = false;
 }

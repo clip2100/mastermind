@@ -199,5 +199,26 @@ function check(e) {
 		}
 	}
 
-	console.log("correct", contCorrect, "semi-correct", contSemiCorrect);
+	//console.log("correct", contCorrect, "semi-correct", contSemiCorrect);
+	showPins(contCorrect, contSemiCorrect);
+}
+
+function showPins(contCorrect, contSemiCorrect) {
+	let currentPins = document.getElementById(
+		"pins" + currentRowPlayingNumber
+	).children;
+	//console.log(currentPins);
+
+	for (let i = 0; i < currentPins.length; i++) {
+		if (currentPins[i].className === "col") {
+			if (contCorrect > 0) {
+				currentPins[i].children[0].className = "check correct";
+				contCorrect--;
+			} else if (contSemiCorrect > 0) {
+				currentPins[i].children[0].className = "check semi-correct";
+				contSemiCorrect--;
+			}
+			//console.log(currentPins[i].children[0]);
+		}
+	}
 }

@@ -2,6 +2,7 @@ let colors = ["green", "yellow", "black", "red", "blue"];
 let choosenColors = [];
 let maxRows = 5;
 let currentMaxRows = maxRows;
+let blockShuffle = false;
 
 let shuffleButton = document.querySelector("#shuffle");
 shuffleButton.addEventListener("click", shuffle);
@@ -78,18 +79,21 @@ function generateRandomColor() {
 }
 
 function shuffle() {
-	//console.log(choosenColors);
+	if (blockShuffle) return;
 
 	let positions = document.getElementById("master").children;
 	choosenColors = [];
 	for (let i = 0; i < positions.length; i++) {
 		if (positions[i].id != "buttonShuffle") {
 			let colorName = generateRandomColor();
-			positions[i].children[0].className = "ball " + colorName;
-
+			//positions[i].children[0].className = "ball " + colorName;
+			positions[i].children[0].textContent = "?";
+			positions[i].children[0].style.textAlign = "center";
+			positions[i].children[0].style.fontWeight = "bolder";
 			choosenColors.push(colorName);
 		}
 	}
-	//console.log(choosenColors);
+	console.log(choosenColors);
 	blockCheck = false;
+	blockShuffle = true;
 }

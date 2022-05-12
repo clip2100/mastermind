@@ -1,21 +1,39 @@
-let colors = ["green", "yellow", "black", "red", "blue", "pink"];
+let colors = ["green", "yellow", "pink", "blue", "red"];
 let choosenColors = [];
+let currentPlayerColors = [undefined, undefined, undefined, undefined];
+let currentRowPlayingNumber = 1;
 let maxRows = 5;
 let currentMaxRows = maxRows;
+let currentPositionHandlers = [];
 let blockShuffle = false;
 let blockCheck = true;
-let currentPositionHandlers = [];
-let currentRowPlayingNumber = 1;
-let currentPlayerColors = [undefined, undefined, undefined, undefined];
+
+let finalMessage = document.getElementById("finalMessage");
 
 let shuffleButton = document.querySelector("#shuffle");
 shuffleButton.addEventListener("click", shuffle);
 
+let resetButton = document.getElementById("reset");
+resetButton.addEventListener("click", handleReset);
+
 let checkButton = document.getElementById("check");
 checkButton.addEventListener("click", check);
+// window.addEventListener("keyup", function (e) {
+// 	if (e.key === "Enter") {
+// 		//alert("a");
+// 		check(e);
+// 	}
+// });
 
-generateGameTable();
-updateRowColors();
+let yieldButton = document.getElementById("yield");
+yieldButton.addEventListener("click", yield);
+
+let setRowsButton = document.getElementById("setRows");
+setRowsButton.addEventListener("click", setRows);
+
+let numRows = document.getElementById("numRows");
+numRows.value = maxRows;
+numRows.addEventListener("input", setMaxRow);
 
 function generateGameTable() {
 	let gameRow = "";
@@ -82,12 +100,12 @@ function generateGameTable() {
 	//console.log(gameTable);
 }
 
-function generateRandomColor() {
-	return colors[Math.floor(Math.random() * colors.length)];
-}
-
 function shuffle() {
 	if (blockShuffle) return;
+
+	if (choosenColors.length === 0) {
+		updateRowColors();
+	}
 
 	let positions = document.getElementById("master").children;
 	choosenColors = [];
@@ -103,6 +121,10 @@ function shuffle() {
 	}
 	console.log(choosenColors);
 	blockCheck = false;
+}
+
+function generateRandomColor() {
+	return colors[Math.floor(Math.random() * colors.length)];
 }
 
 function updateRowColors() {
@@ -127,6 +149,8 @@ function updateRowColors() {
 			currentPositionHandlers[i].children[0].className += " playable";
 		}
 	}
+
+	currentRowPlaying.style.backgroundColor = "lightyellow";
 }
 
 function changeColorBall(e) {
@@ -147,20 +171,20 @@ function changeColorBall(e) {
 	e.target.className = "ball playable " + colors[indexColor];
 	indexPositionInTheRow = e.target.id.replace("try", "");
 	currentPlayerColors[indexPositionInTheRow - 1] = colors[indexColor];
+	//console.log(currentPlayerColors);
 }
 
 function check(e) {
-	//e.preventDefault();
-	//if (blockCheck) return;
+	if (blockCheck) return;
 
 	blockShuffle = true;
-
 	for (let i = 0; i < currentPlayerColors.length; i++) {
 		if (currentPlayerColors[i] == undefined) return;
 	}
 
 	shuffleButton.className += " disabled";
 
+	//control de aciertos
 	let contCorrect = 0;
 	let contSemiCorrect = 0;
 
@@ -199,9 +223,19 @@ function check(e) {
 		}
 	}
 
-	//console.log("correct", contCorrect, "semi-correct", contSemiCorrect);
-	showPins(contCorrect, contSemiCorrect);
+	let currentRowPlaying = document.getElementById(
+		"gameRow" + currentRowPlayingNumber
+	);
+
+	currentRowPlaying.style.backgroundColor = "azure";
+	//console.log("correctas", contCorrect, "semicorrectas", contSemiCorrect);
+	currentPlayerColors = [undefined, undefined, undefined, undefined];
+
 	removeListenersCurrentRow();
+	//assignacion de pins negros/blancos
+
+	//despues de la asignacion de pines si no se ha ganado
+	showPins(contCorrect, contSemiCorrect);
 
 	if (contCorrect < 4) {
 		if (currentRowPlayingNumber === maxRows) {
@@ -261,4 +295,71 @@ function gameOver(win = false) {
 	}
 	shuffleButton.className += " disabled";
 	blockShuffle = true;
+	showWinnerColors();
 }
+
+function showWinnerColors() {
+	let positions = document.getElementById("master").children;
+	for (let i = 0; i < positions.length; i++) {
+		if (positions[i].id != "buttonShuffle") {
+			positions[i].children[0].className = "ball " + choosenColors[i];
+			positions[i].children[0].textContent = "";
+		}
+	}
+}
+
+function yield() {
+	if (choosenColors.length == 0) return;
+	removeListenersCurrentRow();
+	gameOver();
+	showWinnerColors();
+}
+
+function setMaxRow(e) {
+	// console.log(e.target.value);
+	if (e.target.value > 0) {
+		maxRows = parseInt(e.target.value);
+	}
+}
+
+function setRows() {
+	reset();
+	if (maxRows > 0) {
+		//console.log("entra set rows amb ", maxRows);
+		currentMaxRows = maxRows;
+		generateGameTable();
+	}
+	//setRowsButton.className += " disabled";
+}
+
+function handleReset() {
+	reset();
+	generateGameTable();
+}
+
+function reset() {
+	//location.reload();
+	for (let i = 1; i < currentMaxRows + 1; i++) {
+		let element = document.getElementById(`gameRow${i}`);
+		if (element != undefined) element.remove();
+	}
+	choosenColors = [];
+	currentPlayerColors = [undefined, undefined, undefined, undefined];
+
+	let positions = document.getElementById("master").children;
+	for (let i = 0; i < positions.length; i++) {
+		if (positions[i].id != "buttonShuffle") {
+			positions[i].children[0].className = "ball";
+			positions[i].children[0].textContent = "";
+		}
+	}
+	blockShuffle = false;
+	blockCheck = true;
+	currentRowPlayingNumber = 1;
+
+	//setRowsButton.className = setRowsButton.className.replace("disabled", "");
+	shuffleButton.className = shuffleButton.className.replace("disabled", "");
+	finalMessage.innerHTML = "";
+}
+
+generateGameTable();

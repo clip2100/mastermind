@@ -4,6 +4,7 @@ let currentPlayerColors = [undefined, undefined, undefined, undefined];
 let currentRowPlayingNumber = 1;
 let maxRows = 5;
 let currentMaxRows = maxRows;
+let currentColumns = 4;
 let currentPositionHandlers = [];
 let blockShuffle = false;
 let blockCheck = true;
@@ -132,16 +133,17 @@ function updateRowColors() {
 	let currentRowPlaying = document.getElementById(
 		"gameRow" + currentRowPlayingNumber
 	);
-	for (let i = 0; i < maxRows; i++) {
+	for (let i = 0; i < currentColumns; i++) {
 		let tr = currentRowPlaying.children[i];
 		currentPositionHandlers.push(tr);
 	}
 
-	for (let i = 0; i < currentPositionHandlers.length; i++) {
+	for (let i = 0; i < currentColumns; i++) {
 		if (
 			currentPositionHandlers[i] != undefined &&
 			currentPositionHandlers[i].children[0].className === "ball"
 		) {
+			//console.log(currentPositionHandlers[i].children[0]);
 			currentPositionHandlers[i].children[0].addEventListener(
 				"click",
 				changeColorBall
@@ -182,8 +184,8 @@ function check(e) {
 		if (currentPlayerColors[i] == undefined) return;
 	}
 
-	shuffleButton.className += " disabled";
-
+	if (!shuffleButton.className.includes(" disabled"))
+		shuffleButton.className += " disabled";
 	//control de aciertos
 	let contCorrect = 0;
 	let contSemiCorrect = 0;
@@ -293,7 +295,8 @@ function gameOver(win = false) {
 		finalMessage.innerHTML = `<h3>You Lose</h3>`;
 		finalMessage.style.color = "red";
 	}
-	shuffleButton.className += " disabled";
+	if (!shuffleButton.className.includes(" disabled"))
+		shuffleButton.className += " disabled";
 	blockShuffle = true;
 	showWinnerColors();
 }

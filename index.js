@@ -201,6 +201,18 @@ function check(e) {
 
 	//console.log("correct", contCorrect, "semi-correct", contSemiCorrect);
 	showPins(contCorrect, contSemiCorrect);
+	removeListenersCurrentRow();
+
+	if (contCorrect < 4) {
+		if (currentRowPlayingNumber === maxRows) {
+			gameOver();
+			return;
+		}
+		currentRowPlayingNumber++;
+		updateRowColors();
+	} else {
+		gameOver(true);
+	}
 }
 
 function showPins(contCorrect, contSemiCorrect) {
@@ -221,4 +233,32 @@ function showPins(contCorrect, contSemiCorrect) {
 			//console.log(currentPins[i].children[0]);
 		}
 	}
+}
+
+function removeListenersCurrentRow() {
+	for (let i = 0; i < currentPositionHandlers.length; i++) {
+		if (currentPositionHandlers[i] != undefined) {
+			currentPositionHandlers[i].children[0].removeEventListener(
+				"click",
+				changeColorBall
+			);
+			currentPositionHandlers[i].children[0].className =
+				currentPositionHandlers[i].children[0].className.replace(
+					"playable",
+					""
+				);
+		}
+	}
+}
+
+function gameOver(win = false) {
+	if (win) {
+		finalMessage.innerHTML = `<h3>You Win</h3> <h5 style="text-align:center">${currentRowPlayingNumber}/${maxRows}</h5>`;
+		finalMessage.style.color = "green";
+	} else {
+		finalMessage.innerHTML = `<h3>You Lose</h3>`;
+		finalMessage.style.color = "red";
+	}
+	shuffleButton.className += " disabled";
+	blockShuffle = true;
 }

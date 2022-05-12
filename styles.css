@@ -1,0 +1,56 @@
+css body {
+	-moz-transform: scale(0.8, 0.8);
+	zoom: 0.8;
+	zoom: 80%;
+}
+
+.ball {
+	width: 30px;
+	height: 30px;
+	border-radius: 30px;
+	border: solid 2px black;
+}
+
+.playable {
+	cursor: pointer;
+}
+
+.red {
+	background-color: red;
+}
+.blue {
+	background-color: lightskyblue;
+}
+.green {
+	background-color: greenyellow;
+}
+.orange {
+	background-color: lightsalmon;
+}
+.pink {
+	color: rgb(245, 96, 245);
+}
+
+.white {
+	background-color: white;
+}
+.black {
+	background-color: black;
+}
+.yellow {
+	background-color: yellow;
+}
+
+.check {
+	width: 15px;
+	height: 15px;
+	border-radius: 15px;
+}
+.correct {
+	background-color: black;
+	border: solid 2px black;
+}
+.semi-correct {
+	background-color: white;
+	border: solid 2px black;
+}

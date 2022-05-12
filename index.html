@@ -4,9 +4,118 @@
 		<meta charset="UTF-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Document</title>
+		<link
+			rel="stylesheet"
+			href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css"
+		/>
+
+		<link rel="stylesheet" href="styles.css" />
+		<title>Mastermind</title>
 	</head>
 	<body>
-		My Mastermind
+		<header id="main-header" class="bg-primary text-white p-3 mb-3">
+			<div
+				class="container"
+				style="display: flex; justify-content: space-between"
+			>
+				<h1 id="header-title">Mastermind</h1>
+			</div>
+		</header>
+		<div class="container">
+			<div id="main">
+				<div class="container" style="min-width: 500px; width: 50%">
+					<div class="card card-body container">
+						<div class="row" id="master" style="padding-top: 10px">
+							<div class="col-sm" id="master1">
+								<div class="ball bi-question-circle"></div>
+							</div>
+							<div class="col-sm" id="master2">
+								<div class="ball"></div>
+							</div>
+							<div class="col-sm" id="master3">
+								<div class="ball"></div>
+							</div>
+							<div class="col-sm" id="master4">
+								<div class="ball"></div>
+							</div>
+
+							<div class="col-sm" id="buttonShuffle">
+								<div
+									class="row"
+									style="height: 60px; margin-top: -15px; padding-top: 8px"
+								>
+									<button
+										class="btn btn-primary"
+										style="width: 80px"
+										id="shuffle"
+									>
+										Shuffle
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<br />
+
+					<div class="card card-body container" id="gameTable">
+						<div class="row" id="try" style="padding-top: 10px">
+							<div class="col-sm" id="try1">
+								<div class="ball red"></div>
+							</div>
+							<div class="col-sm" id="try2">
+								<div class="ball green"></div>
+							</div>
+							<div class="col-sm" id="try3">
+								<div class="ball blue"></div>
+							</div>
+							<div class="col-sm" id="try4">
+								<div class="ball black"></div>
+							</div>
+
+							<div class="col-sm" id="control0" style="background-color: aqua">
+								<div
+									class="row"
+									style="
+										border: solid 2px black;
+										border-radius: 10px;
+										height: 60px;
+										margin-top: -15px;
+										width: 95px;
+										padding-top: 8px;
+									"
+								>
+									<div class></div>
+									<div class="col"><div class="check correct"></div></div>
+									<div class="col"><div class="check semi-correct"></div></div>
+
+									<div class="w-60"></div>
+
+									<div class="col"><div class="check"></div></div>
+									<div class="col"><div class="check correct"></div></div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<br />
+				</div>
+
+				<div style="display: flex; justify-content: center">
+					<div id="finalMessage"></div>
+				</div>
+				<div style="display: flex; justify-content: center">
+					<input
+						type="submit"
+						class="btn btn-primary"
+						style="width: 150px"
+						id="check"
+						value="Check"
+					/>
+				</div>
+			</div>
+		</div>
+
+		<script src="index.js"></script>
 	</body>
 </html>

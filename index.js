@@ -3,11 +3,16 @@ let choosenColors = [];
 let maxRows = 5;
 let currentMaxRows = maxRows;
 let blockShuffle = false;
+let blockCheck = true;
 let currentPositionHandlers = [];
 let currentRowPlayingNumber = 1;
+let currentPlayerColors = [undefined, undefined, undefined, undefined];
 
 let shuffleButton = document.querySelector("#shuffle");
 shuffleButton.addEventListener("click", shuffle);
+
+let checkButton = document.getElementById("check");
+checkButton.addEventListener("click", check);
 
 generateGameTable();
 updateRowColors();
@@ -97,8 +102,7 @@ function shuffle() {
 		}
 	}
 	console.log(choosenColors);
-
-	blockShuffle = true;
+	blockCheck = false;
 }
 
 function updateRowColors() {
@@ -142,4 +146,58 @@ function changeColorBall(e) {
 	}
 	e.target.className = "ball playable " + colors[indexColor];
 	indexPositionInTheRow = e.target.id.replace("try", "");
+	currentPlayerColors[indexPositionInTheRow - 1] = colors[indexColor];
+}
+
+function check(e) {
+	//e.preventDefault();
+	//if (blockCheck) return;
+
+	blockShuffle = true;
+
+	for (let i = 0; i < currentPlayerColors.length; i++) {
+		if (currentPlayerColors[i] == undefined) return;
+	}
+
+	shuffleButton.className += " disabled";
+
+	let contCorrect = 0;
+	let contSemiCorrect = 0;
+
+	let indexChecked = {};
+	let indexCheckedPlayer = {};
+
+	//to find corrects
+	for (let j = 0; j < choosenColors.length; j++) {
+		for (let i = 0; i < currentPlayerColors.length; i++) {
+			if (choosenColors[j] === currentPlayerColors[i]) {
+				if (j === i) {
+					contCorrect++;
+					indexChecked[j] = true;
+					indexCheckedPlayer[j] = true;
+					break;
+				}
+			}
+		}
+	}
+
+	//console.log(indexChecked);
+	//to find semi corrects
+	for (let j = 0; j < choosenColors.length; j++) {
+		for (let i = 0; i < currentPlayerColors.length; i++) {
+			if (
+				choosenColors[j] === currentPlayerColors[i] &&
+				!indexChecked[j] &&
+				!indexCheckedPlayer[i]
+			) {
+				contSemiCorrect++;
+
+				indexChecked[j] = true;
+				indexCheckedPlayer[i] = true;
+				break;
+			}
+		}
+	}
+
+	console.log("correct", contCorrect, "semi-correct", contSemiCorrect);
 }

@@ -1,13 +1,16 @@
-let colors = ["green", "yellow", "black", "red", "blue"];
+let colors = ["green", "yellow", "black", "red", "blue", "pink"];
 let choosenColors = [];
 let maxRows = 5;
 let currentMaxRows = maxRows;
 let blockShuffle = false;
+let currentPositionHandlers = [];
+let currentRowPlayingNumber = 1;
 
 let shuffleButton = document.querySelector("#shuffle");
 shuffleButton.addEventListener("click", shuffle);
 
 generateGameTable();
+updateRowColors();
 
 function generateGameTable() {
 	let gameRow = "";
@@ -94,6 +97,49 @@ function shuffle() {
 		}
 	}
 	console.log(choosenColors);
-	blockCheck = false;
+
 	blockShuffle = true;
+}
+
+function updateRowColors() {
+	currentPositionHandlers = [];
+	let currentRowPlaying = document.getElementById(
+		"gameRow" + currentRowPlayingNumber
+	);
+	for (let i = 0; i < maxRows; i++) {
+		let tr = currentRowPlaying.children[i];
+		currentPositionHandlers.push(tr);
+	}
+
+	for (let i = 0; i < currentPositionHandlers.length; i++) {
+		if (
+			currentPositionHandlers[i] != undefined &&
+			currentPositionHandlers[i].children[0].className === "ball"
+		) {
+			currentPositionHandlers[i].children[0].addEventListener(
+				"click",
+				changeColorBall
+			);
+			currentPositionHandlers[i].children[0].className += " playable";
+		}
+	}
+}
+
+function changeColorBall(e) {
+	//console.log(e.target);
+	//e.target.className="ball "+colors[]
+	let indexColor = 0;
+	let indexPositionInTheRow = 0;
+	if (e.target.className !== "ball") {
+		let currentColor = e.target.className.replace("ball playable ", "");
+		indexColor = colors.indexOf(currentColor);
+		//console.log(indexColor, currentColor);
+		if (indexColor < colors.length - 1) {
+			indexColor++;
+		} else {
+			indexColor = 0;
+		}
+	}
+	e.target.className = "ball playable " + colors[indexColor];
+	indexPositionInTheRow = e.target.id.replace("try", "");
 }
